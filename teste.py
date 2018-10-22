@@ -21,7 +21,7 @@ def manipula():
 
 
 
-    # lbn["text"] = tx.get(1.0, END)
+# lbn["text"] = tx.get(1.0, END)
 
 janela = Tk()
 
