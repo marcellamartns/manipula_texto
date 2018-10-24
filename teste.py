@@ -13,7 +13,7 @@ class ManipulaTexto(object):
         # caixa de texto 1
         self.tx = tkscrolled.ScrolledText(instancia, width=400, height=15, undo=True)
 
-        self.tx.insert(END, "\n".join(["     marcelo moreira", "kiara fafa", "", "eu tu", ""]))
+        self.tx.insert(END, "\n".join(["00(31) 9 8661-8477", "31-98420-2723", "", "eu tu", "866184"]))
 
 
         # caixa de texto 2
@@ -24,8 +24,8 @@ class ManipulaTexto(object):
 
 
         self.bt = Button(instancia, width=20, text="ok", command=self.manipula)
-        self.bt1 = Button(instancia, width=20, text="Tratar nome", command=self.manipula)
-        self.bt2 = Button(instancia, width=20, text="Tratar telefone", command=self.manipula)
+        self.bt1 = Button(instancia, width=20, text="Tratar nome")
+        self.bt2 = Button(instancia, width=20, text="Tratar telefone", command=self.tratar_telefone)
 
         self._cb_maiusculo = False
         self._check_button_maiusculo = Checkbutton(instancia, text = "Converter para maiusculo", command=self.click_maiusculo)
@@ -80,6 +80,31 @@ class ManipulaTexto(object):
     def click_acentuacao(self):
 
         self._cb_acentuacao = not self._cb_acentuacao
+
+    def _retorna_apenas_numeros(self, texto):
+
+        return texto + "trtado"
+
+    def tratar_telefone(self):
+
+        linhas = self.tx.get(1.0, END).split("\n")
+
+        numeros = []
+
+        for linha in linhas[:-1]:
+            print(linha)
+
+            # tira tudo que for diferente de 0 a 9
+            linha = self._retorna_apenas_numeros(linha)
+
+            # tirar todos os 0 do inicio da
+
+
+            numeros.append(linha)
+
+
+        self.tx2.insert(END, "\n".join(numeros))
+
 
 
 
