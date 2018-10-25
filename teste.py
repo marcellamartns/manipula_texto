@@ -3,6 +3,8 @@
 from tkinter import *
 import unicodedata
 import tkinter.scrolledtext as tkscrolled
+import re
+
 class ManipulaTexto(object):
 
     def __init__(self, instancia):
@@ -19,12 +21,12 @@ class ManipulaTexto(object):
         # caixa de texto 2
         self.tx2 = tkscrolled.ScrolledText(instancia, width=400, height=15, undo=True)
 
-        self.texto = Entry(instancia)
+        self.caixa_texto = Entry(instancia)
 
 
 
-        self.bt = Button(instancia, width=20, text="ok", command=self.manipula)
-        self.bt1 = Button(instancia, width=20, text="Tratar nome")
+
+        self.bt1 = Button(instancia, width=20, text="Tratar nome", command=self.manipula)
         self.bt2 = Button(instancia, width=20, text="Tratar telefone", command=self.tratar_telefone)
 
         self._cb_maiusculo = False
@@ -35,10 +37,10 @@ class ManipulaTexto(object):
 
         self.tx.pack(expand=True, fill='both')
         self.tx2.pack(expand=True, fill='both')
-        self.bt.pack(side=TOP)
+
         self._check_button_maiusculo.pack(side=LEFT)
         self._check_button_acentuacao.pack(side=LEFT)
-        self.texto.pack(side=LEFT)
+        self.caixa_texto.pack(side=LEFT)
         self.bt1.pack(side=LEFT)
         self.bt2.pack(side=LEFT)
 
@@ -83,7 +85,45 @@ class ManipulaTexto(object):
 
     def _retorna_apenas_numeros(self, texto):
 
-        return texto + "trtado"
+        return re.sub("[^0-9]", "", texto)
+
+    def _remove_zeros_inicial(self, texto):
+
+        return re.sub("^0*", "", texto)
+
+    def _verifica_ddd(self, texto):
+
+        if (len(texto) == 8 or len(texto) == 9) and (len(self.caixa_texto.get()) == 2):
+            return self.caixa_texto.get() + texto
+        else:
+            return texto
+
+
+
+    def _verifica_nove(self, texto):
+
+
+        if len(texto) == 11:
+            # 31986618477
+            return texto
+
+
+        if len(texto) == 10:
+            # 3186618477
+            return texto[0:2] + "9" + texto[2:]
+
+        return texto
+
+
+    def _retorna_telefone_valido(self, texto):
+
+        # 31986618477
+        # 3186618477
+
+        if len(texto) == 11 or len(texto) == 10:
+            return texto
+        else:
+            return "0"
 
     def tratar_telefone(self):
 
@@ -98,7 +138,20 @@ class ManipulaTexto(object):
             linha = self._retorna_apenas_numeros(linha)
 
             # tirar todos os 0 do inicio da
+            linha = self._remove_zeros_inicial(linha)
 
+            # insere ou nao ddd
+            linha = self._verifica_ddd(linha)
+
+            # verificar se precisa adicionar o numero 9
+            linha = self._verifica_nove(linha)
+
+
+
+
+
+            # valida telefone
+            linha = self._retorna_telefone_valido(linha)
 
             numeros.append(linha)
 
